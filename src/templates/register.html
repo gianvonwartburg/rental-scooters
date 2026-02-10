@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% block content %}
+<h1>Registrieren</h1>
+<form method="post">
+  <div>
+    <label>Username</label><br />
+    <input name="username" required maxlength="50" />
+  </div>
+  <div>
+    <label>E-Mail</label><br />
+    <input name="email" type="email" required maxlength="255" />
+  </div>
+  <div>
+    <label>Passwort</label><br />
+    <input name="password" type="password" required minlength="6" />
+  </div>
+  <div>
+    <label>Rolle</label><br />
+    <select name="role" required>
+      <option value="driver">driver</option>
+      <option value="provider">provider</option>
+    </select>
+  </div>
+  <button type="submit">Account erstellen</button>
+</form>
+{% endblock %}

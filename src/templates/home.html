@@ -1,0 +1,17 @@
+{% extends "base.html" %} {% block content %}
+<h1>Rental Scooters</h1>
+
+{% if current_user %}
+<p>Willkommen, {{ current_user.username }}!</p>
+
+{% if current_user.role == "provider" %}
+<ul>
+  <li><a href="/provider/scooters">Scooter verwalten</a></li>
+</ul>
+{% elif current_user.role == "driver" %}
+<ul>
+  <li><a href="/driver/scooters">Scooter finden & mieten</a></li>
+</ul>
+{% endif %} {% else %}
+<p>Bitte einloggen oder registrieren.</p>
+{% endif %} {% endblock %}

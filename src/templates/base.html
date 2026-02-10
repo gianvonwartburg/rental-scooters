@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{{ title or "Rental Scooters" }}</title>
+  </head>
+  <body>
+    <nav>
+      <a href="{{ url_for('home') }}">Home</a>
+      {% if current_user %}
+      <span
+        >Angemeldet als {{ current_user.username }} ({{ current_user.role
+        }})</span
+      >
+      <a href="{{ url_for('auth.logout') }}">Logout</a>
+      {% else %}
+      <a href="{{ url_for('auth.login') }}">Login</a>
+      <a href="{{ url_for('auth.register') }}">Registrieren</a>
+      {% endif %}
+    </nav>
+
+    <hr />
+
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul>
+      {% for msg in messages %}
+      <li>{{ msg }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %} {% block content %}{% endblock %}
+  </body>
+</html>
