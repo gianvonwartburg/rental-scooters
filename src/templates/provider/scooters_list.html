@@ -1,0 +1,56 @@
+{% extends "base.html" %} {% block content %}
+<h1>Scooter verwalten</h1>
+
+<p><a href="{{ url_for('provider.scooters_new') }}">+ Neuer Scooter</a></p>
+
+{% if scooters %}
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Identifier</th>
+      <th>Status</th>
+      <th>Akku %</th>
+      <th>Lat</th>
+      <th>Lng</th>
+      <th>Aktionen</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in scooters %}
+    <tr>
+      <td>{{ s.scooter_id }}</td>
+      <td>{{ s.scooter_identifier }}</td>
+      <td>{{ s.status }}</td>
+      <td>{{ s.battery_percent }}</td>
+      <td>{{ s.latitude or "" }}</td>
+      <td>{{ s.longitude or "" }}</td>
+      <td>
+        <a
+          href="{{ url_for('provider.scooters_edit', scooter_id=s.scooter_id) }}"
+          >Bearbeiten</a
+        >
+        |
+        <form
+          method="post"
+          action="{{ url_for('provider.scooters_delete_post', scooter_id=s.scooter_id) }}"
+          style="display: inline"
+        >
+          <button
+            type="submit"
+            onclick="return confirm('Scooter wirklich löschen?');"
+          >
+            Löschen
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Du hast noch keine Scooter.</p>
+{% endif %}
+
+<p><a href="{{ url_for('home') }}">Zurück</a></p>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Scooter finden & mieten</h1>
+
+{% if scooters %}
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Identifier</th>
+      <th>Akku %</th>
+      <th>Status</th>
+      <th>Aktion</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in scooters %}
+    <tr>
+      <td>{{ s.scooter_identifier }}</td>
+      <td>{{ s.battery_percent }}</td>
+      <td>{{ s.status }}</td>
+      <td>
+        <form method="post" action="{{ url_for('driver.start_rental', scooter_id=s.scooter_id) }}">
+          <button type="submit">Mieten</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Keine verfügbaren Scooter.</p>
+{% endif %}
+
+<p><a href="{{ url_for('home') }}">Zurück</a></p>
+{% endblock %}

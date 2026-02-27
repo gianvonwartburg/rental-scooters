@@ -13,6 +13,7 @@ class Rental(db.Model):
     end_time = db.Column(db.DateTime, nullable=True)
 
     distance_km = db.Column(db.Numeric(8, 2), nullable=True)
+    billed_minutes = db.Column(db.Integer, nullable=True)
     price_total = db.Column(db.Numeric(10, 2), nullable=True)
 
     status = db.Column(db.String(20), nullable=False)  # active/finished/cancelled

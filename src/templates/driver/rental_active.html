@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Aktive Miete</h1>
+
+<p>Du hast aktuell eine aktive Miete.</p>
+<ul>
+  <li>Rental ID: {{ rental.rental_id }}</li>
+  <li>Scooter ID: {{ rental.scooter_id }}</li>
+  <li>Status: {{ rental.status }}</li>
+  <li>Start: {{ rental.start_time }}</li>
+</ul>
+
+<a href="{{ url_for('driver.finish_rental_form', rental_id=rental.rental_id) }}">Miete beenden</a>
+
+<p><a href="{{ url_for('home') }}">Zurück</a></p>
+{% endblock %}

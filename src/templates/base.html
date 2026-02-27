@@ -5,6 +5,26 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{{ title or "Rental Scooters" }}</title>
   </head>
+  <!-- TODO Styles -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    nav a {
+      margin-right: 10px;
+    }
+    table {
+      border-collapse: collapse;
+    }
+    th {
+      text-align: left;
+    }
+    .flash {
+      background: #f5f5f5;
+      padding: 10px;
+    }
+  </style>
   <body>
     <nav>
       <a href="{{ url_for('home') }}">Home</a>
