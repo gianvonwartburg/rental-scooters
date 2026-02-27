@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block content %}
+﻿{% extends "base.html" %} {% block content %}
 <h1>Scooter verwalten</h1>
 
 <p><a href="{{ url_for('provider.scooters_new') }}">+ Neuer Scooter</a></p>
@@ -11,8 +11,7 @@
       <th>Identifier</th>
       <th>Status</th>
       <th>Akku %</th>
-      <th>Lat</th>
-      <th>Lng</th>
+      <th>Standort</th>
       <th>Aktionen</th>
     </tr>
   </thead>
@@ -23,8 +22,16 @@
       <td>{{ s.scooter_identifier }}</td>
       <td>{{ s.status }}</td>
       <td>{{ s.battery_percent }}</td>
-      <td>{{ s.latitude or "" }}</td>
-      <td>{{ s.longitude or "" }}</td>
+      <td>
+        {% if s.latitude is not none and s.longitude is not none %}
+        <a
+          href="https://www.google.com/maps?q={{ s.latitude }},{{ s.longitude }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          >In Google Maps öffnen</a
+        >
+        {% else %} - {% endif %}
+      </td>
       <td>
         <a
           href="{{ url_for('provider.scooters_edit', scooter_id=s.scooter_id) }}"
@@ -38,9 +45,9 @@
         >
           <button
             type="submit"
-            onclick="return confirm('Scooter wirklich löschen?');"
+            onclick="return confirm('Scooter wirklich loeschen?');"
           >
-            Löschen
+            Loeschen
           </button>
         </form>
       </td>
@@ -52,5 +59,5 @@
 <p>Du hast noch keine Scooter.</p>
 {% endif %}
 
-<p><a href="{{ url_for('home') }}">Zurück</a></p>
+<p><a href="{{ url_for('home') }}">Zurueck</a></p>
 {% endblock %}

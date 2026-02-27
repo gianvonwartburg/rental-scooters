@@ -6,9 +6,12 @@ from models import Rental, Scooter, User
 
 from datetime import datetime
 from decimal import Decimal
+import math
 
 driver_bp = Blueprint("driver", __name__, url_prefix="/driver")
 
+BASE_FEE = Decimal("2.00")
+PRICE_PER_MINUTE = Decimal("0.35")
 
 def get_current_user() -> User | None:
     user_id = session.get("user_id")
@@ -155,15 +158,48 @@ def finish_rental(rental_id: int):
 
     # Apply updates
     scooter.battery_percent = battery
-    scooter.latitude = lat_raw or None
-    scooter.longitude = lng_raw or None
     scooter.status = "available"
+
+    # Latitude/Longitude optional aber wenn gesetzt: validieren
+    lat = None
+    lng = None
+
+    if lat_raw:
+        try:
+            lat = Decimal(lat_raw)
+            if lat < Decimal("-90") or lat > Decimal("90"):
+                raise ValueError()
+        except Exception:
+            flash("Latitude muss eine Zahl zwischen -90 und 90 sein.")
+            return redirect(url_for("driver.finish_rental_form", rental_id=rental_id))
+
+    if lng_raw:
+        try:
+            lng = Decimal(lng_raw)
+            if lng < Decimal("-180") or lng > Decimal("180"):
+                raise ValueError()
+        except Exception:
+            flash("Longitude muss eine Zahl zwischen -180 und 180 sein.")
+            return redirect(url_for("driver.finish_rental_form", rental_id=rental_id))
+
+    if lat_raw:
+        scooter.latitude = lat
+    if lng_raw:
+        scooter.longitude = lng
 
     rental.distance_km = distance
     rental.status = "finished"
     rental.end_time = datetime.utcnow()
 
+    # Dauer berechne
+    duration_seconds = (rental.end_time - rental.start_time).total_seconds()
+    minutes = math.ceil(duration_seconds / 60)
+    minutes = max(1, minutes)  # mindestens 1 Minute verrechnen
+
+    rental.billed_minutes = minutes
+    rental.price_total = BASE_FEE + (Decimal(minutes) * PRICE_PER_MINUTE)
+
     db.session.commit()
 
-    flash("Miete beendet.")
+    flash(f"Miete beendet. Dauer: {minutes} Min. Preis: CHF {rental.price_total}")
     return redirect(url_for("driver.scooters_list"))
