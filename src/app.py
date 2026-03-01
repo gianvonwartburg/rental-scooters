@@ -4,14 +4,15 @@ from flask import render_template
 from dotenv import load_dotenv
 from pathlib import Path
 
-# .env aus Repo-Root laden am Anfang (egal von wo gestartet)
+# .env aus Repo-Root laden am Anfang
 load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env")
 
 from config import Config
 from extensions import db
-from models import User, Scooter, Rental  # noqa: F401
+from models import ApiToken, Rental, Scooter, User
 
 from routes.auth import auth_bp
+from routes.api import api_bp
 from routes.provider import provider_bp
 from routes.driver import driver_bp
 
@@ -21,6 +22,7 @@ def create_app():
     db.init_app(app)
 
     app.register_blueprint(auth_bp)
+    app.register_blueprint(api_bp)
     app.register_blueprint(provider_bp)
     app.register_blueprint(driver_bp)
 
