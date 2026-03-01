@@ -3,6 +3,7 @@ from flask import session
 from flask import render_template
 from dotenv import load_dotenv
 from pathlib import Path
+import os
 
 # .env aus Repo-Root laden am Anfang
 load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env")
@@ -39,7 +40,8 @@ def create_app():
         return render_template("home.html")    
 
     with app.app_context():
-        db.create_all()
+        if os.getenv("INIT_DB") == "1":
+            db.create_all()
 
     return app
 
