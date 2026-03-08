@@ -20,19 +20,19 @@ def register_post():
     role = request.form.get("role") or ""
 
     if role not in ("provider", "driver"):
-        flash("Ungültige Rolle.")
+        flash("Ungültige Rolle.", "danger")
         return redirect(url_for("auth.register"))
 
     if not username or not email or not password:
-        flash("Bitte alle Felder ausfüllen.")
+        flash("Bitte alle Felder ausfüllen.", "warning")
         return redirect(url_for("auth.register"))
 
     if User.query.filter_by(username=username).first():
-        flash("Username ist bereits vergeben.")
+        flash("Username ist bereits vergeben.", "warning")
         return redirect(url_for("auth.register"))
 
     if User.query.filter_by(email=email).first():
-        flash("E-Mail ist bereits vergeben.")
+        flash("E-Mail ist bereits vergeben.", "warning")
         return redirect(url_for("auth.register"))
 
     user = User(
@@ -44,7 +44,7 @@ def register_post():
     db.session.add(user)
     db.session.commit()
 
-    flash("Registrierung erfolgreich. Bitte einloggen.")
+    flash("Registrierung erfolgreich. Bitte einloggen.", "success")
     return redirect(url_for("auth.login"))
 
 
@@ -60,16 +60,16 @@ def login_post():
 
     user = User.query.filter_by(username=username).first()
     if not user or not check_password_hash(user.password_hash, password):
-        flash("Login fehlgeschlagen.")
+        flash("Login fehlgeschlagen.", "danger")
         return redirect(url_for("auth.login"))
 
     session["user_id"] = user.user_id
-    flash("Erfolgreich eingeloggt.")
+    flash("Erfolgreich eingeloggt.", "success")
     return redirect(url_for("home"))
 
 
 @auth_bp.get("/logout")
 def logout():
     session.pop("user_id", None)
-    flash("Ausgeloggt.")
+    flash("Ausgeloggt.", "info")
     return redirect(url_for("home"))

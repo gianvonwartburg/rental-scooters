@@ -1,32 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Miete beenden</h1>
+<div class="py-4">
+  <h1 class="mb-3">Miete beenden</h1>
 
-<p>Bitte gib die Werte ein (Simulation).</p>
+  <p class="text-muted mb-3">Bitte gib die Werte ein (Simulation).</p>
 
-<form method="post">
-  <div>
-    <label>Akku nach Fahrt (%)</label><br />
-    <input name="battery_percent" type="number" min="0" max="100" required />
-  </div>
+  <form method="post">
+    <div class="mb-3">
+      <label class="form-label" for="battery_percent">Akku nach Fahrt (%)</label>
+      <input class="form-control" id="battery_percent" name="battery_percent" type="number" min="0" max="100" required />
+    </div>
 
-  <div>
-    <label>Distanz (km) (optional)</label><br />
-    <input name="distance_km" type="number" step="0.01" min="0" />
-  </div>
+    <div class="mb-3">
+      <label class="form-label" for="distance_km">Distanz (km) (optional)</label>
+      <input class="form-control" id="distance_km" name="distance_km" type="number" step="0.01" min="0" />
+    </div>
 
-  <div>
-    <label>Latitude (optional)</label><br />
-    <input name="latitude" />
-  </div>
+    <div class="mb-3">
+      <label class="form-label" for="latitude">Latitude (optional)</label>
+      <input class="form-control" id="latitude" name="latitude" />
+    </div>
 
-  <div>
-    <label>Longitude (optional)</label><br />
-    <input name="longitude" />
-  </div>
+    <div class="mb-3">
+      <label class="form-label" for="longitude">Longitude (optional)</label>
+      <input class="form-control" id="longitude" name="longitude" />
+    </div>
 
-  <button type="submit">Miete definitiv beenden</button>
-</form>
-
-<p><a href="{{ url_for('driver.scooters_list') }}">Abbrechen</a></p>
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary" type="submit">Miete definitiv beenden</button>
+      <a class="btn btn-outline-secondary" href="{{ url_for('driver.scooters_list') }}">Abbrechen</a>
+    </div>
+  </form>
+</div>
 {% endblock %}

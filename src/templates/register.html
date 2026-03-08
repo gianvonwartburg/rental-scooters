@@ -1,25 +1,58 @@
 {% extends "base.html" %} {% block content %}
-<h1>Registrieren</h1>
-<form method="post">
-  <div>
-    <label>Username</label><br />
-    <input name="username" required maxlength="50" />
+<div class="py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <h1 class="mb-4">Registrieren</h1>
+      <form method="post">
+        <div class="mb-3">
+          <label class="form-label" for="username">Username</label>
+          <input
+            class="form-control"
+            id="username"
+            name="username"
+            required
+            maxlength="50"
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="email">E-Mail</label>
+          <input
+            class="form-control"
+            id="email"
+            name="email"
+            type="email"
+            required
+            maxlength="255"
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="password">Passwort</label>
+          <input
+            class="form-control"
+            id="password"
+            name="password"
+            type="password"
+            required
+            minlength="6"
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="role">Rolle</label>
+          <select class="form-select" id="role" name="role" required>
+            <option value="driver">Fahrer</option>
+            <option value="provider">Anbieter</option>
+          </select>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary" type="submit">
+            Account erstellen
+          </button>
+          <a class="btn btn-outline-secondary" href="{{ url_for('home') }}"
+            >Zurück</a
+          >
+        </div>
+      </form>
+    </div>
   </div>
-  <div>
-    <label>E-Mail</label><br />
-    <input name="email" type="email" required maxlength="255" />
-  </div>
-  <div>
-    <label>Passwort</label><br />
-    <input name="password" type="password" required minlength="6" />
-  </div>
-  <div>
-    <label>Rolle</label><br />
-    <select name="role" required>
-      <option value="driver">driver</option>
-      <option value="provider">provider</option>
-    </select>
-  </div>
-  <button type="submit">Account erstellen</button>
-</form>
+</div>
 {% endblock %}

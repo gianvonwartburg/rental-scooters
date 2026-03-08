@@ -24,7 +24,7 @@ def login_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
         if not get_current_user():
-            flash("Bitte zuerst einloggen.")
+            flash("Bitte zuerst einloggen.", "warning")
             return redirect(url_for("auth.login"))
         return fn(*args, **kwargs)
 
@@ -36,7 +36,7 @@ def driver_required(fn):
     def wrapper(*args, **kwargs):
         user = get_current_user()
         if not user:
-            flash("Bitte zuerst einloggen.")
+            flash("Bitte zuerst einloggen.", "warning")
             return redirect(url_for("auth.login"))
         if user.role != "driver":
             abort(403)
@@ -72,12 +72,12 @@ def start_rental(scooter_id: int):
 
     # Business rule: ein Driver darf nur 1 aktive Miete haben
     if get_active_rental_for_driver(user.user_id):
-        flash("Du hast bereits eine aktive Miete.")
+        flash("Du hast bereits eine aktive Miete.", "warning")
         return redirect(url_for("driver.scooters_list"))
 
     scooter = db.session.get(Scooter, scooter_id)
     if not scooter or scooter.status != "available":
-        flash("Scooter ist nicht verfügbar.")
+        flash("Scooter ist nicht verfügbar.", "warning")
         return redirect(url_for("driver.scooters_list"))
 
     # Statuswechsel + Rental anlegen
@@ -91,7 +91,7 @@ def start_rental(scooter_id: int):
     db.session.add(rental)
     db.session.commit()
 
-    flash("Miete gestartet.")
+    flash("Miete gestartet.", "success")
     return redirect(url_for("driver.scooters_list"))
 
 
@@ -106,7 +106,7 @@ def finish_rental_form(rental_id: int):
         abort(404)
 
     if rental.status != "active":
-        flash("Miete ist nicht aktiv.")
+        flash("Miete ist nicht aktiv.", "warning")
         return redirect(url_for("driver.scooters_list"))
 
     scooter = db.session.get(Scooter, rental.scooter_id)
@@ -123,7 +123,7 @@ def finish_rental(rental_id: int):
         abort(404)
 
     if rental.status != "active":
-        flash("Miete ist nicht aktiv.")
+        flash("Miete ist nicht aktiv.", "warning")
         return redirect(url_for("driver.scooters_list"))
 
     battery_raw = request.form.get("battery_percent")
@@ -137,7 +137,7 @@ def finish_rental(rental_id: int):
         if battery < 0 or battery > 100:
             raise ValueError()
     except Exception:
-        flash("Akku muss eine Zahl von 0 bis 100 sein.")
+        flash("Akku muss eine Zahl von 0 bis 100 sein.", "warning")
         return redirect(url_for("driver.finish_rental_form", rental_id=rental_id))
 
     # Distance optional
@@ -148,12 +148,12 @@ def finish_rental(rental_id: int):
             if distance < 0:
                 raise ValueError()
         except Exception:
-            flash("Distanz muss eine positive Zahl sein.")
+            flash("Distanz muss eine positive Zahl sein.", "warning")
             return redirect(url_for("driver.finish_rental_form", rental_id=rental_id))
 
     scooter = db.session.get(Scooter, rental.scooter_id)
     if not scooter:
-        flash("Scooter nicht gefunden.")
+        flash("Scooter nicht gefunden.", "danger")
         return redirect(url_for("driver.scooters_list"))
 
     # Apply updates
@@ -170,7 +170,7 @@ def finish_rental(rental_id: int):
             if lat < Decimal("-90") or lat > Decimal("90"):
                 raise ValueError()
         except Exception:
-            flash("Latitude muss eine Zahl zwischen -90 und 90 sein.")
+            flash("Latitude muss eine Zahl zwischen -90 und 90 sein.", "warning")
             return redirect(url_for("driver.finish_rental_form", rental_id=rental_id))
 
     if lng_raw:
@@ -179,7 +179,7 @@ def finish_rental(rental_id: int):
             if lng < Decimal("-180") or lng > Decimal("180"):
                 raise ValueError()
         except Exception:
-            flash("Longitude muss eine Zahl zwischen -180 und 180 sein.")
+            flash("Longitude muss eine Zahl zwischen -180 und 180 sein.", "warning")
             return redirect(url_for("driver.finish_rental_form", rental_id=rental_id))
 
     if lat_raw:
@@ -201,5 +201,5 @@ def finish_rental(rental_id: int):
 
     db.session.commit()
 
-    flash(f"Miete beendet. Dauer: {minutes} Min. Preis: CHF {rental.price_total}")
+    flash(f"Miete beendet. Dauer: {minutes} Min. Preis: CHF {rental.price_total}", "success")
     return redirect(url_for("driver.scooters_list"))

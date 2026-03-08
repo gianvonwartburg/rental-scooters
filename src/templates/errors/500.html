@@ -1,0 +1,9 @@
+{% extends "base.html" %} {% block content %}
+<div class="text-center py-5">
+  <h1 class="mb-3">500 – Serverfehler</h1>
+  <p class="text-muted">
+    Da ist etwas schiefgelaufen. Bitte versuche es erneut.
+  </p>
+  <a class="btn btn-primary" href="{{ url_for('home') }}">Zur Startseite</a>
+</div>
+{% endblock %}

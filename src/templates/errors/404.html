@@ -1,0 +1,7 @@
+{% extends "base.html" %} {% block content %}
+<div class="text-center py-5">
+  <h1 class="mb-3">404 – Seite nicht gefunden</h1>
+  <p class="text-muted">Die angeforderte Seite existiert nicht.</p>
+  <a class="btn btn-primary" href="{{ url_for('home') }}">Zur Startseite</a>
+</div>
+{% endblock %}

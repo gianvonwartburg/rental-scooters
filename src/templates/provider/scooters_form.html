@@ -1,34 +1,53 @@
-{% extends "base.html" %} {% block content %} {% if scooter %}
-<h1>Scooter bearbeiten</h1>
+{% extends "base.html" %}
+
+{% block content %}
+{% if scooter %}
+<h1 class="mb-3">Scooter bearbeiten</h1>
 {% else %}
-<h1>Neuer Scooter</h1>
+<h1 class="mb-3">Neuer Scooter</h1>
 {% endif %}
 
 <form method="post">
   {% if not scooter %}
-  <div>
-    <label>Scooter-Identifier (eindeutig)</label><br />
-    <input name="scooter_identifier" required maxlength="64" />
+  <div class="mb-3">
+    <label class="form-label" for="scooter_identifier"
+      >Scooter-Identifier (eindeutig)</label
+    >
+    <input
+      class="form-control"
+      id="scooter_identifier"
+      name="scooter_identifier"
+      required
+      maxlength="64"
+    />
   </div>
   {% else %}
-  <p><strong>Identifier:</strong> {{ scooter.scooter_identifier }}</p>
+  <div class="mb-3">
+    <p class="mb-0">
+      <strong>Identifier:</strong> {{ scooter.scooter_identifier }}
+    </p>
+  </div>
   {% endif %}
 
-  <div>
-    <label>Status</label><br />
-    <select name="status" required>
+  <div class="mb-3">
+    <label class="form-label" for="status">Status</label>
+    <select class="form-select" id="status" name="status" required>
       {% for st in statuses %}
-      <option value="{{ st }}"
-        {% if (scooter and scooter.status == st) or (not scooter and st == 'available') %}selected{% endif %}>
+      <option
+        value="{{ st }}"
+        {% if (scooter and scooter.status == st) or (not scooter and st == 'available') %}selected{% endif %}
+      >
         {{ st }}
       </option>
       {% endfor %}
     </select>
   </div>
 
-  <div>
-    <label>Akku %</label><br />
+  <div class="mb-3">
+    <label class="form-label" for="battery_percent">Akku %</label>
     <input
+      class="form-control"
+      id="battery_percent"
       name="battery_percent"
       type="number"
       min="0"
@@ -38,25 +57,34 @@
     />
   </div>
 
-  <div>
-    <label>Latitude</label><br />
+  <div class="mb-3">
+    <label class="form-label" for="latitude">Latitude</label>
     <input
+      class="form-control"
+      id="latitude"
       name="latitude"
       value="{{ scooter.latitude if scooter and scooter.latitude is not none else '' }}"
     />
   </div>
 
-  <div>
-    <label>Longitude</label><br />
+  <div class="mb-3">
+    <label class="form-label" for="longitude">Longitude</label>
     <input
+      class="form-control"
+      id="longitude"
       name="longitude"
       value="{{ scooter.longitude if scooter and scooter.longitude is not none else '' }}"
     />
   </div>
 
-  <button type="submit">Speichern</button>
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary" type="submit">Speichern</button>
+    <a
+      class="btn btn-outline-secondary"
+      href="{{ url_for('provider.scooters_list') }}"
+      >Zurück zur Liste</a
+    >
+  </div>
 </form>
-
-<p><a href="{{ url_for('provider.scooters_list') }}">Zurück zur Liste</a></p>
 
 {% endblock %}

@@ -1,16 +1,39 @@
-{% extends "base.html" %}
-{% block content %}
-<h1>Aktive Miete</h1>
+{% extends "base.html" %} {% block content %}
+<div class="py-4">
+  <h1 class="mb-3">Aktive Miete</h1>
 
-<p>Du hast aktuell eine aktive Miete.</p>
-<ul>
-  <li>Rental ID: {{ rental.rental_id }}</li>
-  <li>Scooter ID: {{ rental.scooter_id }}</li>
-  <li>Status: {{ rental.status }}</li>
-  <li>Start: {{ rental.start_time }}</li>
-</ul>
+  <div class="alert alert-info mb-3">Du hast aktuell eine aktive Miete.</div>
 
-<a href="{{ url_for('driver.finish_rental_form', rental_id=rental.rental_id) }}">Miete beenden</a>
+  <div class="card mb-3">
+  <div class="card-body">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Rental ID</span>
+          <strong>{{ rental.rental_id }}</strong>
+        </li>
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Scooter ID</span>
+          <strong>{{ rental.scooter_id }}</strong>
+        </li>
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Status</span>
+          <strong>{{ rental.status }}</strong>
+        </li>
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Start</span>
+          <strong>{{ rental.start_time.strftime('%d.%m.%Y %H:%M') }}</strong>
+        </li>
+      </ul>
+    </div>
+  </div>
 
-<p><a href="{{ url_for('home') }}">Zurück</a></p>
+  <div class="d-flex gap-2">
+    <a
+      class="btn btn-primary"
+      href="{{ url_for('driver.finish_rental_form', rental_id=rental.rental_id) }}"
+      >Miete beenden</a
+    >
+    <a class="btn btn-outline-secondary" href="{{ url_for('home') }}">Zurück</a>
+  </div>
+</div>
 {% endblock %}

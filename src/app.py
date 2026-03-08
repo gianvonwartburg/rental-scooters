@@ -39,12 +39,23 @@ def create_app():
     def home():
         return render_template("home.html")    
 
+    @app.errorhandler(403)
+    def forbidden(e):
+        return render_template("errors/403.html"), 403
+
+    @app.errorhandler(404)
+    def not_found(e):
+        return render_template("errors/404.html"), 404
+
+    @app.errorhandler(500)
+    def server_error(e):
+        return render_template("errors/500.html"), 500
+    
     with app.app_context():
         if os.getenv("INIT_DB") == "1":
             db.create_all()
 
     return app
-
 
 if __name__ == "__main__":
     app = create_app()

@@ -1,17 +1,61 @@
 {% extends "base.html" %} {% block content %}
-<h1>Rental Scooters</h1>
 
-{% if current_user %}
-<p>Willkommen, {{ current_user.username }}!</p>
+<div class="py-4">
+  <h1 class="mb-3 text-center">Rental Scooters</h1>
 
-{% if current_user.role == "provider" %}
-<ul>
-  <li><a href="/provider/scooters">Scooter verwalten</a></li>
-</ul>
-{% elif current_user.role == "driver" %}
-<ul>
-  <li><a href="/driver/scooters">Scooter finden & mieten</a></li>
-</ul>
-{% endif %} {% else %}
-<p>Bitte einloggen oder registrieren.</p>
-{% endif %} {% endblock %}
+  {% if current_user %}
+  <div class="alert alert-success">
+    Willkommen, <strong>{{ current_user.username }}</strong>!
+  </div>
+
+  {% if current_user.role == "provider" %}
+  <div class="row justify-content-center mt-3">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Anbieter Bereich</h5>
+          <p class="card-text">
+            Verwalte deine Scooter und überprüfe deine Einnahmen.
+          </p>
+          <a
+            class="btn btn-primary"
+            href="{{ url_for('provider.scooters_list') }}"
+          >
+            Scooter verwalten
+          </a>
+          <a
+            class="btn btn-outline-secondary ms-2"
+            href="{{ url_for('provider.earnings') }}"
+          >
+            Einnahmen ansehen
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% elif current_user.role == "driver" %}
+  <div class="row justify-content-center mt-3">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Fahrer Bereich</h5>
+          <p class="card-text">
+            Finde verfügbare Scooter und starte deine Fahrt.
+          </p>
+          <a
+            class="btn btn-primary"
+            href="{{ url_for('driver.scooters_list') }}"
+          >
+            Scooter finden & mieten
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %} {% else %}
+  <div class="alert alert-info">Bitte einloggen oder registrieren.</div>
+  {% endif %}
+</div>
+
+{% endblock %}

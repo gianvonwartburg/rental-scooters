@@ -1,63 +1,72 @@
-﻿{% extends "base.html" %} {% block content %}
-<h1>Scooter verwalten</h1>
+{% extends "base.html" %} {% block content %}
+<h1 class="mb-3">Scooter verwalten</h1>
 
-<p><a href="{{ url_for('provider.scooters_new') }}">+ Neuer Scooter</a></p>
+<div class="mb-3">
+  <a class="btn btn-primary" href="{{ url_for('provider.scooters_new') }}"
+    >+ Neuer Scooter</a
+  >
+</div>
 
 {% if scooters %}
-<table border="1" cellpadding="6" cellspacing="0">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Identifier</th>
-      <th>Status</th>
-      <th>Akku %</th>
-      <th>Standort</th>
-      <th>Aktionen</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for s in scooters %}
-    <tr>
-      <td>{{ s.scooter_id }}</td>
-      <td>{{ s.scooter_identifier }}</td>
-      <td>{{ s.status }}</td>
-      <td>{{ s.battery_percent }}</td>
-      <td>
-        {% if s.latitude is not none and s.longitude is not none %}
-        <a
-          href="https://www.google.com/maps?q={{ s.latitude }},{{ s.longitude }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          >In Google Maps öffnen</a
-        >
-        {% else %} - {% endif %}
-      </td>
-      <td>
-        <a
-          href="{{ url_for('provider.scooters_edit', scooter_id=s.scooter_id) }}"
-          >Bearbeiten</a
-        >
-        |
-        <form
-          method="post"
-          action="{{ url_for('provider.scooters_delete_post', scooter_id=s.scooter_id) }}"
-          style="display: inline"
-        >
-          <button
-            type="submit"
-            onclick="return confirm('Scooter wirklich loeschen?');"
+<div class="table-responsive">
+  <table class="table table-striped table-bordered align-middle">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Identifier</th>
+        <th>Status</th>
+        <th>Akku %</th>
+        <th>Standort</th>
+        <th>Aktionen</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in scooters %}
+      <tr>
+        <td>{{ s.scooter_id }}</td>
+        <td>{{ s.scooter_identifier }}</td>
+        <td>{{ s.status }}</td>
+        <td>{{ s.battery_percent }}</td>
+        <td>
+          {% if s.latitude is not none and s.longitude is not none %}
+          <a
+            class="btn btn-outline-secondary btn-sm"
+            href="https://www.google.com/maps?q={{ s.latitude }},{{ s.longitude }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            >In Google Maps öffnen</a
           >
-            Loeschen
-          </button>
-        </form>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+          {% else %} - {% endif %}
+        </td>
+        <td>
+          <div class="d-flex gap-2">
+            <a
+              class="btn btn-outline-secondary btn-sm"
+              href="{{ url_for('provider.scooters_edit', scooter_id=s.scooter_id) }}"
+              >Bearbeiten</a
+            >
+            <form
+              method="post"
+              action="{{ url_for('provider.scooters_delete_post', scooter_id=s.scooter_id) }}"
+            >
+              <button
+                class="btn btn-danger btn-sm"
+                type="submit"
+                onclick="return confirm('Scooter wirklich loeschen?');"
+              >
+                Loeschen
+              </button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% else %}
 <p>Du hast noch keine Scooter.</p>
 {% endif %}
 
-<p><a href="{{ url_for('home') }}">Zurueck</a></p>
+<a class="btn btn-outline-secondary" href="{{ url_for('home') }}">Zurück</a>
 {% endblock %}
