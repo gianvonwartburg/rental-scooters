@@ -3,6 +3,7 @@ from decimal import Decimal, InvalidOperation
 
 from flask import Blueprint, abort, flash, redirect, render_template, request, session, url_for
 from sqlalchemy import and_, func
+from sqlalchemy.exc import IntegrityError
 
 from extensions import db
 from models import Rental, Scooter, User
@@ -226,12 +227,19 @@ def scooters_delete_post(scooter_id: int):
     user = get_current_user()
     scooter = get_owned_scooter_or_404(scooter_id, user.user_id)
 
-    # Optional Business Rule: nicht löschen, wenn aktive Miete existiert
-    if any(r.status == "active" for r in scooter.rentals):
-        flash("Scooter kann nicht gelöscht werden: aktive Miete vorhanden.", "warning")
+    if scooter.rentals:
+        flash("Scooter kann nicht gelöscht werden, da bereits Vermietungen existieren.", "warning")
         return redirect(url_for("provider.scooters_list"))
 
-    db.session.delete(scooter)
-    db.session.commit()
-    flash("Scooter gelöscht.", "success")
+    try:
+        db.session.delete(scooter)
+        db.session.commit()
+        flash("Scooter gelöscht.", "success")
+    except IntegrityError:
+        db.session.rollback()
+        flash("Scooter konnte nicht gelöscht werden, da noch verknüpfte Vermietungen existieren.", "danger")
+    except Exception:
+        db.session.rollback()
+        flash("Unerwarteter Fehler beim Löschen des Scooters.", "danger")
+
     return redirect(url_for("provider.scooters_list"))
